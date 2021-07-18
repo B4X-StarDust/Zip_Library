@@ -1,0 +1,115 @@
+﻿Build1=Default,b4a.example
+File1=main.bal
+FileGroup1=Default Group
+Group=Default Group
+Library1=core
+Library2=javaobject
+ManifestCode='This code will be applied to the manifest file during compilation.~\n~'You do not need to modify it in most cases.~\n~'See this link for for more information: https://www.b4x.com/forum/showthread.php?p=78136~\n~AddManifestText(~\n~<uses-sdk android:minSdkVersion="5" android:targetSdkVersion="19"/>~\n~<supports-screens android:largeScreens="true" ~\n~    android:normalScreens="true" ~\n~    android:smallScreens="true" ~\n~    android:anyDensity="true"/>)~\n~SetApplicationAttribute(android:icon, "@drawable/icon")~\n~SetApplicationAttribute(android:label, "$LABEL$")~\n~CreateResourceFromFile(Macro, Themes.DarkTheme)~\n~'End of default text.~\n~'AddPermission(android.permission.WRITE_EXTERNAL_STORAGE)
+Module1=SD_ZipLibrary
+Module2=Starter
+NumberOfFiles=1
+NumberOfLibraries=2
+NumberOfModules=2
+Version=11
+@EndOfDesignText@
+   #Region  Project Attributes 
+	#ApplicationLabel: B4A Example
+	#VersionCode: 1
+	#VersionName: 
+	#LibraryAuthor: Star-Dust
+	#LibraryName: SD_ZipLibray
+	#LibraryVersion: 1.03
+	'SupportedOrientations possible values: unspecified, landscape or portrait.
+	#SupportedOrientations: unspecified
+	#CanInstallToExternalStorage: False
+#End Region
+
+#Region  Activity Attributes 
+	#FullScreen: False
+	#IncludeTitle: True
+#End Region
+
+Sub Process_Globals
+	'These global variables will be declared once when the application starts.
+	'These variables can be accessed from all modules.
+
+End Sub
+
+Sub Globals
+	'These global variables will be redeclared each time the activity is created.
+	'These variables can only be accessed from this module.
+
+	Private ListView1 As ListView
+End Sub
+
+Sub Activity_Create(FirstTime As Boolean)
+	'Do not forget to load the layout file created with the visual designer. For example:
+	'Activity.LoadLayout("Layout1")
+	Activity.LoadLayout("main")
+	ListView1.SingleLineLayout.Label.TextColor=Colors.Black
+End Sub
+
+Sub Activity_Resume
+
+End Sub
+
+Sub Activity_Pause (UserClosed As Boolean)
+
+End Sub
+
+
+Sub Button1_Click
+	Dim UZ As SD_ZipLibrary
+	
+	UZ.Initialize(Me,"UZ")
+	Log("File Exist: " & File.Exists(File.DirRootExternal,"OCR.zip"))
+	Dim L As List = UZ.unZipList(File.Combine(File.DirRootExternal,"OCR.zip"))
+
+	Log("Num: " & L.Size)
+	
+	ListView1.Clear
+	ListView1.Clear
+	For Each S As String In L
+		ListView1.AddSingleLine(S)
+	Next
+End Sub
+
+Sub Button2_Click
+	Dim UZ As SD_ZipLibrary
+		
+	UZ.Initialize(Me,"UZ")
+	UZ.unZip(File.Combine(File.DirRootExternal,"OCR.zip"),File.Combine(File.DirRootExternal,"OCR"))
+End Sub
+
+Sub UZ_finish(Success As Boolean)
+	Log("finish: " & Success)
+End Sub
+
+Sub Button3_Click
+	Dim DBFileDir As String = ""
+	Dim ListFiles As List
+	Dim Zip As SD_ZipLibrary
+	Dim ZipFilename As String = ""
+	
+	ListFiles.Initialize
+	
+	Dim I As Int = File.ListFiles(DBFileDir&"/XML").Size
+	Dim Lista(I) As String
+	
+	For Each NomeFileFattura As String In File.ListFiles(DBFileDir&"/XML")
+		I=i-1
+		Lista(i)=File.Combine(DBFileDir & "/XML",NomeFileFattura)
+	Next
+
+	If ListFiles.Size > 0 Then
+		Zip.Initialize(Me,"zip")
+		DateTime.DateFormat = "yyyy_MMMM_dd"
+		ZipFilename=File.Combine(DBFileDir&"/XML", "FattureRicevute_" & DateTime.Date(DateTime.Now) & ".zip")
+		Zip.Zip(Lista,ZipFilename)
+		DateTime.DateFormat = "dd/MM/yyyy"
+	End If
+End Sub
+
+Public Sub zip_finish (Success As Boolean)
+	Log("Result :" & Success)
+End Sub

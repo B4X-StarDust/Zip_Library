@@ -1,0 +1,8 @@
+Questo file associa le variabili rinominate dall'originale.
+v5=unzip
+v6=unziplist
+v7=zip
+v0=mcallback
+vv1=mevent
+vv2=main
+vv3=starter
